@@ -5020,11 +5020,27 @@ class NICSoutWindow(QMainWindow):
 		ringNo_zz = int(ringCombo_2.currentText())
 		bqNo_zz = int(bqCombo.currentText())
 		norx, nory, norz = geomAnalyzer.normal_vector(ringList[ringNo_zz-1], geomList)
-		
-		comp_x = norx*norx*xxTen[bqNo_zz-1]+nory*norx*yxTen[bqNo_zz-1]+norz*norx*zxTen[bqNo_zz-1]
-		comp_y = norx*nory*xyTen[bqNo_zz-1]+nory*nory*yyTen[bqNo_zz-1]+norz*nory*zyTen[bqNo_zz-1]
-		comp_z = norx*norz*xzTen[bqNo_zz-1]+nory*norz*yzTen[bqNo_zz-1]+norz*norz*zzTen[bqNo_zz-1]
+
+        #I think this is wrong. #why did we do it this way? #the formula is in error
+		comp_x = norx*xxTen[bqNo_zz-1]+nory*yxTen[bqNo_zz-1]+norz*zxTen[bqNo_zz-1]
+		comp_y = norx*xyTen[bqNo_zz-1]+nory*yyTen[bqNo_zz-1]+norz*zyTen[bqNo_zz-1]
+		comp_z = norx*xzTen[bqNo_zz-1]+nory*yzTen[bqNo_zz-1]+norz*zzTen[bqNo_zz-1]
+
+        #okay, I fixed the math error in the matrix multiplication.
+        
+        #but this isn't the zz component of the tensor
 		new_nics = comp_x+comp_y+comp_z
+
+        #even if we just put the z basis through this, we'd get zz + zy + zx
+        #this is wrong
+
+        #need to do a change of basis and take the ZZ element after this
+        
+        #I think there is an error or instability here
+        #rather, let's make a change of basis matrix to make
+        #the normal vector the Z vector
+
+        
 		
 		nicszzOutText.setText(f'{new_nics:.4f}')
 
