@@ -22,8 +22,8 @@ class output_analyzer:
 
     def computeNICSIso(self,):
         pass
+
     
-    #then we can work with the info we extracted
     def computeNICSPerp(self,bq_number,ring_number):
         xBqCoor, yBqCoor, zBqCoor, colorBqList = geomAnalyzer.save_coor_list(self.logBqList)
         isoTen, aniTen, xxTen, yxTen, zxTen, xyTen, yyTen, zyTen, xzTen, yzTen, zzTen = self.tensor
@@ -32,7 +32,8 @@ class output_analyzer:
         
         rotationMatrix = mathUtilities.align_matrix(ringNormal,np.array([0,0,1]))
     
-        assert np.linalg.norm(rotationMatrix @ np.array([0,0,1]) - ringNormal) < 0.00001
+        if not 1 - np.dot(rotationMatrix @ np.array([0,0,1]), ringNormal) < 0.001:
+            raise RuntimeError('Bad change of basis')
         
         i = bq_number
         Tensor1 = np.array(
@@ -60,20 +61,3 @@ class output_analyzer:
             ringAverageNICSPerpList.append(ringAverage)
             
         return NICSPerpList, ringAverageNICSPerpList
-            #THAT'S ALL SHE WROTE
-            #NOW DEBUG. We're making good progress!
-            #after this some simple visualization functions
-
-#TO GO ANY FURTHER:
-#NEED TO READ TENSOR FROM ORCA
-#(let's read a NICS output file and see if this is hard)
-#this would be a cool thing to have in SOP
-#let's also run the benchmarks overnight;
-#I want that in the SOP as well.
-#GONNA take a break at 7pm to spend time with family.
-
-#
-
-
-
-
